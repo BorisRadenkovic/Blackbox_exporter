@@ -1,4 +1,4 @@
 - labels:
     module: ssh_banner
   targets:
-    - 10.196.113.26
+    - 10.196.113.26:8080
