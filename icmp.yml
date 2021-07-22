@@ -1,4 +1,4 @@
 - labels:
-    module: ssh_banner
+    module: icmp
   targets:
     - 10.196.113.26
