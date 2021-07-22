@@ -8,7 +8,7 @@ scrape_configs:
     metrics_path: /probe
     file_sd_configs:
       - files:
-          - '/home/rboris/IdeaProjects/Blackbox_exporter'
+          - '/home/rboris/IdeaProjects/Blackbox_exporter*.yml'
 
     relabel_configs:
       - source_labels: [__address__]
