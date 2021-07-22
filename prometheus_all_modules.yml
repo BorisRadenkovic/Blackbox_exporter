@@ -1,0 +1,72 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/blackbox/targets/*.yml'
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [ module ]
+        target_label: __param_module
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: localhost:9115
+
+
+  - job_name: 'Blackbox_icmp'
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    static_configs:
+      - targets:
+          - 10.196.113.26
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        # Blackbox exporter Host:Port
+        replacement: 127.0.0.1:9115
+
+  - job_name: 'Blackbox_ssh'
+    metrics_path: /probe
+    params:
+      module: [ssh_banner]
+    static_configs:
+      - targets:
+          # target Host:Port
+          - 10.196.113.26
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: (.*?)(:.*)?
+        replacement: ${1}:22
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115
+
+  - job_name: 'Blackbox_tcp'
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    static_configs:
+      - targets:
+          - 10.196.113.26:8080
+        # target Host:Port (example below is MariaDB/MySQL)
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115

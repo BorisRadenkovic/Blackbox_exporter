@@ -1,0 +1,4 @@
+- labels:
+    module: irc_banner
+  targets:
+    - 10.196.113.26
